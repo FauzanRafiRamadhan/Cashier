@@ -1,13 +1,15 @@
 package com.smk.cashier.service;
 
 import com.smk.cashier.model.Barang;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BarangServiceTest {
 
     @Test
@@ -18,6 +20,7 @@ class BarangServiceTest {
     }
 
     @Test
+    @Order(1)
     void addBarang() {
         Barang laptop=new Barang();
         laptop.setKodeBarang("LP001");
@@ -26,9 +29,9 @@ class BarangServiceTest {
         BarangService.getInstance().addBarang(laptop);
 
         Barang mouse=new Barang();
-        mouse.setKodeBarang("LP001");
-        mouse.setNamaBarang("Laptop");
-        mouse.setHargaBarang(5000000);
+        mouse.setKodeBarang("M002");
+        mouse.setNamaBarang("Mouse");
+        mouse.setHargaBarang(1000000);
         BarangService.getInstance().addBarang(mouse);
 
     }
