@@ -84,4 +84,7 @@ public class UserService {
         userList.add(user);
         writeFile();
     }
+
+    public void addUser(User user) {
+    }
 }
