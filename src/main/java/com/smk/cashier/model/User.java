@@ -31,4 +31,7 @@ public class User extends Model {
                 ", updatedBy='" + updatedBy + '\'' +
                 '}';
     }
+
+    public void setUsername(String binaInformatika) {
+    }
 }
