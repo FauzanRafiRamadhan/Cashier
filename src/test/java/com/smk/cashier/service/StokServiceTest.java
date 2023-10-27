@@ -1,5 +1,6 @@
 package com.smk.cashier.service;
 
+import Dao.StokDao;
 import com.smk.cashier.model.Stok;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,5 +51,36 @@ class StokServiceTest {
         laptop.setStokbarang(6);
         StokService.getInstance().addStok(laptopGaming);
 
+    }
+    @Test
+    @Order(2)
+    void getById() {
+        StokDao dao = new StokDao();
+        Optional<Stok> s1 = dao.get(1);
+        s1.ifPresent(new Consumer<Stok>() {
+            @Override
+            public void accept(Stok stock) {
+                assertEquals("B001", stock.getKodebarang());
+                assertEquals(10, stock.getStokbarang());
+            }
+        });
+
+        Optional<Stok> s2 = dao.get(2);
+        s2.ifPresent(new Consumer<Stok>() {
+            @Override
+            public void accept(Stok stock) {
+                assertEquals("B002", stock.getKodebarang());
+                assertEquals(15, stock.getStokbarang());
+            }
+        });
+
+        Optional<Stok> s3 = dao.get(3);
+        s3.ifPresent(new Consumer<Stok>() {
+            @Override
+            public void accept(Stok stock) {
+                assertEquals("B003", stock.getKodebarang());
+                assertEquals(5, stock.getStokbarang());
+            }
+        });
     }
 }
