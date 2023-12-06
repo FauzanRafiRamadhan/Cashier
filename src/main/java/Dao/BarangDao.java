@@ -5,6 +5,7 @@ import com.smk.cashier.model.Barang;
 
 import java.sql.*;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class BarangDao implements Dao<Barang, Integer> {
                 if(numberOfInsertedRows > 0) {
                     ResultSet rs = ps.getGeneratedKeys();
                     if(rs.next()){
-                        generatedId = Optional.of(rs.getInt(1));
+                        generatedId = Optional.of(rs.getInt(8));
                     }
                 }
             } catch (SQLException e) {
@@ -86,6 +87,47 @@ public class BarangDao implements Dao<Barang, Integer> {
 
     @Override
     public void delete(Barang barang) {
+        Barang nonNullBarang = Objects.requireNonNull(barang);
 
+        String sql = "DELETE FROM barang WHERE kode_barang = ?";
+
+        connection.ifPresent(conn -> {
+            try {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, barang.getKodeBarang());
+                int numberOfDeletedRows = ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
-}
+
+        public Collection<Barang> search(String keyword) {
+            Collection<Barang> barangList = new LinkedList<>();
+            String sql = "SELECT * FROM barang WHERE kode_barang LIKE CONCAT(%,?,%) ";
+            connection.ifPresent(conn -> {
+                try {
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1,keyword);
+                    ps.setString(2,keyword);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()){
+                        String kodeBarang = rs.getString("kode_barang");
+                        String namaBarang = rs.getString("nama_barang");
+                        int hargaBarang = rs.getInt("harga_barang");
+                        Barang barangResult = new Barang();
+                        barangResult.setKodeBarang(kodeBarang);
+                        barangResult.setNamaBarang(namaBarang);
+                        barangResult.setHargaBarang(hargaBarang);
+
+                        barangList.add(barangResult);
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+            return barangList;
+
+        }    
+    }
